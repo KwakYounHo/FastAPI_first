@@ -76,17 +76,17 @@ def updateData(body: PostAndPutDataModel):
     print(e)
     return JSONResponse({"error": "Write file error"}, status_code=402)
 
-@app.delete("/json")
-def deleteData(body: PostAndPutDataModel):
+@app.delete("/json/{key}")
+def deleteData(key: str):
   data = readJson()
-  if not body.key in data:
+  if not key in data:
     return JSONResponse({"error": "Not found key"}, status_code=404)
 
   try:
-    del data[body.key]
+    del data[key]
     with open(filePath, "w") as file:
       json.dump(data, file, ensure_ascii=False, indent=4)
-      return JSONResponse({"data": f"{body.key} was deleted"}, status_code=201)
+      return JSONResponse({"data": f"{key} was deleted"}, status_code=201)
   except Exception as e:
     print(e)
     return JSONResponse({"error": "Write file error"}, status_code=402)
